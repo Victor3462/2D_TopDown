@@ -4,8 +4,8 @@ using Raylib_cs;
 Raylib.InitWindow(800, 600, "Topdown Game");
 Raylib.SetTargetFPS(60);
 
-Texture2D playerImage = Raylib.LoadTexture("gubbe.png");
-Texture2D enemyImage = Raylib.LoadTexture("amogus.png");
+Texture2D playerImage = Raylib.LoadTexture("amogus.png");
+Texture2D ventImage = Raylib.LoadTexture("vent.png");
 
 //float x = 4.5f;
 
@@ -14,17 +14,27 @@ Texture2D enemyImage = Raylib.LoadTexture("amogus.png");
 //int z = (int) 4.6f;
 
 Rectangle playerRect = new Rectangle(10, 10, playerImage.width, playerImage.height);
-Rectangle enemyRect = new Rectangle(100, 159, enemyImage.width, enemyImage.height);
-Rectangle overlap = Raylib.GetCollisionRec(playerRect, enemyRect);
+Rectangle ventRect = new Rectangle(400, 375, ventImage.width, ventImage.height);
+Rectangle overlap = Raylib.GetCollisionRec(playerRect, ventRect);
 
-bool areOverlapping = Raylib.CheckCollisionRecs(playerRect, enemyRect);
+
+Color pcolor = Color.BLUE;
+Color ecolor = Color.RED;
+Color ocolor = Color.PURPLE;
+
+string room = "1";
 
 while (!Raylib.WindowShouldClose())
 {
 
-int speed = 3;
+    int speed = 3;
 
-        if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT))
+    {
+        speed = 5;
+    }
+
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
     {
         playerRect.x += speed;
     }
@@ -45,14 +55,42 @@ int speed = 3;
 
     Raylib.BeginDrawing();
 
+    if (room == "1")
+    {
 
-    Raylib.ClearBackground(Color.BLACK);
-    Raylib.DrawRectangleRec(playerRect, Color.BLUE);
-    Raylib.DrawRectangleRec(enemyRect, Color.RED);
-    Raylib.DrawRectangleRec(overlap, Color.PURPLE);
 
-    Raylib.DrawTexture(playerImage, (int)playerRect.x, (int)playerRect.y, Color.BLUE);
-    Raylib.DrawTexture(enemyImage, (int)enemyRect.x, (int) enemyRect.y, Color.RED);
+        bool areOverlapping = Raylib.CheckCollisionRecs(playerRect, ventRect);
+
+        Raylib.ClearBackground(Color.BLACK);
+        Raylib.DrawRectangleRec(playerRect, pcolor);
+        Raylib.DrawRectangleRec(ventRect, ecolor);
+
+        Raylib.DrawTexture(playerImage, (int)playerRect.x, (int)playerRect.y, Color.BLUE);
+        Raylib.DrawTexture(ventImage, (int)ventRect.x, (int)ventRect.y, Color.RED);
+
+        if (areOverlapping == true)
+        {
+            room = "2";
+        }
+
+    }
+
+    if (room == "2")
+    {
+        Raylib.ClearBackground(Color.GRAY);
+        Raylib.DrawRectangleRec(playerRect, pcolor);
+
+        Raylib.DrawTexture(playerImage, (int)playerRect.x, (int)playerRect.y, Color.BLUE);
+
+    }
+
+
+
+
+
+
+
+
 
 
     Raylib.EndDrawing();
